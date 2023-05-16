@@ -33,4 +33,12 @@ public class EmployeeService {
 	public Employee getEmployeeById(Integer eid) {
 		return employeeRepository.getEmployeeById(eid);
 	}
+	
+	public int updateEmployee(Employee employee) {
+		return employeeRepository.updateEmployee(employee);
+	}
+	
+	public int removeEmployeeById(Integer id) {
+		return employeeRepository.removeEmployeeById(id);
+	}
 }

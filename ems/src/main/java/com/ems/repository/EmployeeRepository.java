@@ -19,12 +19,28 @@ public class EmployeeRepository {
 	public int saveEmployee(Employee employee) {
 		int value = 0;
 		try {
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/usertest", "root", "root");
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3307/usertest", "root", "root");
 			PreparedStatement preparedStatement = connection.prepareStatement("insert into employee values(?,?,?);");
 			preparedStatement.setInt(1, employee.geteId());
 			preparedStatement.setString(2, employee.geteName());
 			preparedStatement.setInt(3, employee.geteAge());
 
+			value = preparedStatement.executeUpdate();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return value;
+	}
+	
+	public int updateEmployee(Employee employee) {
+		int value = 0;
+		try {
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3307/usertest", "root", "root");
+			PreparedStatement preparedStatement = connection.prepareStatement("update  employee  set name=? where id=?;");
+			preparedStatement.setString(1, employee.geteName());
+			preparedStatement.setInt(2, employee.geteId());
 			value = preparedStatement.executeUpdate();
 
 		} catch (SQLException e) {
@@ -42,15 +58,15 @@ public class EmployeeRepository {
 		ResultSet resultSet = null;
 
 		try {
-			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/usertest", "root", "root");
+			connection = DriverManager.getConnection("jdbc:mysql://localhost:3307/usertest", "root", "root");
 			preparedStatement = connection.prepareStatement("select * from employee;");
 			resultSet = preparedStatement.executeQuery();
 			
 			while(resultSet.next()) {
 				Employee employee=new Employee();
-				employee.seteId(resultSet.getInt("eid"));
-				employee.seteName(resultSet.getString("ename"));
-				employee.seteAge(resultSet.getInt("eage"));
+				employee.seteId(resultSet.getInt("id"));
+				employee.seteName(resultSet.getString("name"));
+				employee.seteAge(resultSet.getInt("age"));
 				employees.add(employee);
 			}
 		} catch (SQLException e) {
@@ -80,16 +96,16 @@ public class EmployeeRepository {
 		ResultSet resultSet = null;
 
 		try {
-			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/usertest", "root", "root");
-			preparedStatement = connection.prepareStatement("select * from employee where eid=?");
+			connection = DriverManager.getConnection("jdbc:mysql://localhost:3307/usertest", "root", "root");
+			preparedStatement = connection.prepareStatement("select * from employee where id=?");
 			preparedStatement.setInt(1, eid);
 			resultSet = preparedStatement.executeQuery();
 			
 			while(resultSet.next()) {
 				
-				employee.seteId(resultSet.getInt("eid"));
-				employee.seteName(resultSet.getString("ename"));
-				employee.seteAge(resultSet.getInt("eage"));
+				employee.seteId(resultSet.getInt("id"));
+				employee.seteName(resultSet.getString("name"));
+				employee.seteAge(resultSet.getInt("age"));
 				
 			}
 		} catch (SQLException e) {
@@ -109,5 +125,21 @@ public class EmployeeRepository {
 		}
 
 		return employee;
+	}
+	
+	public int removeEmployeeById(Integer id) {
+		int value = 0;
+		try {
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3307/usertest", "root", "root");
+			PreparedStatement preparedStatement = connection.prepareStatement("delete from employee where id=?;");
+			preparedStatement.setInt(1, id);
+		
+			value = preparedStatement.executeUpdate();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return value;
 	}
 }
